@@ -1,6 +1,6 @@
 # 🧬 Genetix: Algoritmos Evolutivos
 
-**Genetix** es un proyecto educativo diseñado para explorar y visualizar el funcionamiento de los **Algoritmos Genéticos (AG)**. El objetivo principal es encontrar dos números naturales cuya suma coincida con un valor objetivo definido por el usuario, utilizando para ello un proceso de selección natural computacional.
+**Genetix** es un proyecto educativo diseñado para explorar y visualizar el funcionamiento de los **Algoritmos Genéticos (AG)**. El objetivo principal es encontrar dos números naturales cuya suma coincida con un valor objetivo definido por el usuario, utilizando para ello un proceso de selección natural.
 
 Este proyecto ha sido desarrollado como trabajo de ampliación para la asignatura de **Programación (1º DAM)** durante el primer trimestre.
 
@@ -29,6 +29,6 @@ El algoritmo sigue un flujo darwiniano:
 3. **Reproducción:** Los hijos heredan genes de los padres con una probabilidad de mutación del 10%.
 4. **Sustitución:** La nueva generación reemplaza a la anterior, manteniendo a los líderes (elitismo).
 
-Cualquier comentario, sugerencia o conexión será bienvenida.
+Estaré encantado de recibir comentarios y sugerencias...
 
 ¡Gracias por pasarte por aquí! 🙌
