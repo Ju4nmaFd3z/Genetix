@@ -7,7 +7,7 @@ Este proyecto ha sido desarrollado como trabajo de ampliación para la asignatur
 ## 🚀 Características
 
 - **Simulador en tiempo real:** Visualización interactiva del proceso evolutivo mediante gráficos de convergencia (Recharts).
-- **Lógica Genética Pura:** Implementación fiel de los pilares de la computación evolutiva:
+- **Lógica Genética Pura**
   - **Población Inicial:** Generación aleatoria basada en el rango del objetivo.
   - **Elitismo:** Preservación automática de los dos mejores individuos de cada generación.
   - **Crossover (Cruce):** Mezcla de material genético de los progenitores más aptos.
