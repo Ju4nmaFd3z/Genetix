@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tab } from './types';
 import Simulator from './components/Simulator';
@@ -10,34 +9,34 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Cabecera */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      {/* Cabecera Responsiva Permanente (Fixed) */}
+      <header className="fixed top-0 left-0 right-0 bg-white border-b border-slate-200 z-50 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-3 md:py-0 md:h-16 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
           <div className="flex items-center">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">
                 Genetix
               </span>
               <span className="text-slate-300 font-light">|</span>
-              <span className="text-slate-700 font-semibold tracking-tight">Juanma Fernández</span>
+              <span className="text-slate-700 font-semibold tracking-tight text-center md:text-left">Juanma Fernández</span>
             </h1>
           </div>
-          <nav className="flex gap-2 md:gap-4">
+          <nav className="flex gap-1 md:gap-4 justify-center">
             <button 
               onClick={() => setActiveTab(Tab.Theory)}
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-md transition-colors text-sm md:text-base ${activeTab === Tab.Theory ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600'}`}
+              className={`px-2.5 py-1.5 md:px-4 md:py-2 rounded-md transition-colors text-xs sm:text-sm md:text-base ${activeTab === Tab.Theory ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600'}`}
             >
-              Investigación Previa
+              Investigación
             </button>
             <button 
               onClick={() => setActiveTab(Tab.Simulator)}
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-md transition-colors text-sm md:text-base ${activeTab === Tab.Simulator ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600'}`}
+              className={`px-2.5 py-1.5 md:px-4 md:py-2 rounded-md transition-colors text-xs sm:text-sm md:text-base ${activeTab === Tab.Simulator ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600'}`}
             >
               Simulador
             </button>
             <button 
               onClick={() => setActiveTab(Tab.JavaCode)}
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-md transition-colors text-sm md:text-base ${activeTab === Tab.JavaCode ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600'}`}
+              className={`px-2.5 py-1.5 md:px-4 md:py-2 rounded-md transition-colors text-xs sm:text-sm md:text-base ${activeTab === Tab.JavaCode ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-slate-600 hover:text-indigo-600'}`}
             >
               Código Java
             </button>
@@ -45,8 +44,8 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Contenido Principal */}
-      <main className="flex-1 max-w-6xl mx-auto w-full p-4 md:p-8">
+      {/* Contenido Principal con margen para compensar el header fijo */}
+      <main className="flex-1 max-w-6xl mx-auto w-full p-4 md:p-8 mt-[110px] md:mt-16">
         {activeTab === Tab.Theory && <Presentation />}
         {activeTab === Tab.Simulator && <Simulator />}
         {activeTab === Tab.JavaCode && <JavaCode />}

@@ -41,7 +41,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const Simulator: React.FC = () => {
-  const [target, setTarget] = useState<number>(100);
+  const [target, setTarget] = useState<number | string>(100);
   const [history, setHistory] = useState<GenerationResult[]>([]);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [generation, setGeneration] = useState<number>(0);
@@ -64,21 +64,25 @@ const Simulator: React.FC = () => {
   };
 
   const createIndividual = useCallback((a?: number, b?: number): Individual => {
-    const range = target * 2;
+    const targetNum = Number(target) || 0;
+    const range = targetNum * 2 || 100;
     const valA = a ?? Math.floor(Math.random() * range);
     const valB = b ?? Math.floor(Math.random() * range);
     return {
       a: valA,
       b: valB,
       sum: valA + valB,
-      fitness: calculateFitness(valA, valB, target)
+      fitness: calculateFitness(valA, valB, targetNum)
     };
   }, [target]);
 
   const startEvolution = () => {
+    if (target === "" || isNaN(Number(target))) return;
+
+    const targetNum = Number(target);
     setHistory([]);
     setGeneration(0);
-    setLogs(["Iniciando simulación...", `Objetivo: ${target}`]);
+    setLogs(["Iniciando simulación...", `Objetivo: ${targetNum}`]);
     setIsRunning(true);
 
     let currentPop: Individual[] = Array.from({ length: POPULATION_SIZE }, () => createIndividual());
@@ -102,7 +106,7 @@ const Simulator: React.FC = () => {
         }]);
 
         if (best.fitness === 0) {
-          setLogs(prevLogs => [...prevLogs, "", "¡OBJETIVO ALCANZADO!", `${best.a} + ${best.b} = ${target}`]);
+          setLogs(prevLogs => [...prevLogs, "", "¡OBJETIVO ALCANZADO!", `${best.a} + ${best.b} = ${targetNum}`]);
           setIsRunning(false);
           return nextGen;
         }
@@ -158,28 +162,39 @@ const Simulator: React.FC = () => {
   }, []);
 
   const lastGen = history[history.length - 1];
+  const isTargetInvalid = target === "" || isNaN(Number(target));
 
   return (
     <div className="space-y-8 animate-fadeIn">
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
         <h2 className="text-2xl font-bold text-slate-800 mb-4">Simulador en tiempo real</h2>
-        <div className="flex flex-wrap items-end gap-6">
+        <div className="flex flex-wrap items-start gap-6">
           <div className="flex-1 min-w-[200px]">
             <label className="block text-sm font-semibold text-slate-600 mb-2 uppercase tracking-wide">Valor objetivo de la suma</label>
             <input 
               type="number" 
               value={target}
-              onChange={(e) => setTarget(Number(e.target.value))}
+              inputMode="numeric"
+              onChange={(e) => setTarget(e.target.value)}
               disabled={isRunning}
               placeholder="Ej: 100"
-              className="w-full px-5 py-3 text-2xl font-bold text-slate-900 bg-white border-2 border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all outline-none shadow-sm disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-100 disabled:cursor-not-allowed"
+              className={`w-full px-5 py-3 text-2xl font-bold rounded-xl transition-all outline-none shadow-sm disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-100 disabled:cursor-not-allowed border-2 ${isTargetInvalid && !isRunning ? 'border-red-200 bg-red-50 focus:border-red-500 focus:ring-red-100' : 'border-slate-200 bg-white focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500'}`}
             />
+            {isTargetInvalid && !isRunning && (
+              <p className="text-red-500 text-xs font-bold mt-3 animate-pulse flex items-center gap-1.5 ml-1">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                Introduce un valor para iniciar la evolución
+              </p>
+            )}
           </div>
-          <div className="flex gap-2 mb-1">
+          <div className="flex gap-2 mt-7">
             {!isRunning ? (
               <button 
                 onClick={startEvolution}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-indigo-100 active:scale-95"
+                disabled={isTargetInvalid}
+                className={`px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg active:scale-95 ${isTargetInvalid ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-100'}`}
               >
                 Iniciar evolución
               </button>
@@ -195,7 +210,7 @@ const Simulator: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-4">
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-[450px] relative overflow-hidden">
             <div className="flex items-center justify-between mb-6">
@@ -309,7 +324,7 @@ const Simulator: React.FC = () => {
                 <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
                   <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Mejor individuo</p>
                   <p className="text-xl font-bold text-emerald-800">
-                    {lastGen.bestIndividual.a} + {lastGen.bestIndividual.b} = {lastGen.bestIndividual.sum}
+                    {lastGen.bestIndividual.a} + {lastGen.bestIndividual.sum - lastGen.bestIndividual.a} = {lastGen.bestIndividual.sum}
                   </p>
                   <p className="text-sm text-emerald-600 mt-1">Error absoluto: {lastGen.bestIndividual.fitness}</p>
                 </div>
@@ -318,7 +333,7 @@ const Simulator: React.FC = () => {
                   <div className="space-y-1">
                     {lastGen.population.slice(0, 5).map((ind, i) => (
                       <div key={i} className="flex justify-between text-sm py-1 border-b border-slate-100 last:border-0">
-                        <span className="text-slate-600">{ind.a} + {ind.b}</span>
+                        <span className="text-slate-600">{ind.a} + {ind.sum - ind.a}</span>
                         <span className="font-mono font-medium text-slate-800">Err: {ind.fitness}</span>
                       </div>
                     ))}

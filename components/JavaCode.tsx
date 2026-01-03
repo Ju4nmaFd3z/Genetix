@@ -165,7 +165,7 @@ const JavaCode: React.FC = () => {
         </div>
 
         <div className="relative group">
-          <div className="bg-slate-900 p-6 rounded-2xl overflow-x-auto border border-slate-800 shadow-inner max-h-[650px] scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900">
+          <div className="bg-slate-900 p-6 rounded-2xl overflow-y-auto border border-slate-800 shadow-inner max-h-[650px] no-scrollbar">
             <pre className="m-0">
               <JavaHighlighter code={JAVA_SOURCE} />
             </pre>
